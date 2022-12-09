@@ -2,18 +2,21 @@ import java.io.File
 import kotlin.math.absoluteValue
 
 fun main(args: Array<String>) {
-    val test = File("input.txt").bufferedReader()
-    val newRopeSection = RopeSection()
+    val test = File("input2.txt").bufferedReader()
+    val part1Rope = Rope(2)
+    val part2Rope = Rope(10)
     test.forEachLine {
         val command = it.split(" ")
-        for (i in 1.. command[1].toInt()) {
-            newRopeSection.moveHead(command[0])
+        for (i in 1..command[1].toInt()) {
+            part1Rope.moveHead(command[0])
+            part2Rope.moveHead(command[0])
         }
     }
     // part 1
-    println(newRopeSection.positionsVisited.size)
+    println(part1Rope.tailVisited())
 
     //part 2
+    println(part2Rope.tailVisited())
 }
 
 class RopeSection(
@@ -32,23 +35,9 @@ class RopeSection(
 //    }
 
     // only moves 1 block at a time, including diags
-    fun moveHead(direction: String): Pair<Int, Int> {
+    fun moveHead(afterPos: Pair<Int, Int>): Pair<Int, Int> {
         val prevHead = headPos
-        when (direction){
-            "R" -> {
-                headPos = (headPos.first + 1) to headPos.second
-            }
-            "L" -> {
-                headPos = (headPos.first - 1) to headPos.second
-            }
-            "U" -> {
-                headPos = headPos.first to (headPos.second + 1)
-            }
-            "D" -> {
-                headPos = headPos.first to (headPos.second - 1)
-            }
-            else -> {}
-        }
+        headPos = afterPos
         if (!tailAdjHead()) {
             tailPos = prevHead
         }
@@ -57,11 +46,38 @@ class RopeSection(
     }
 }
 
-class Rope(val knots: Int){
-    val ropeSections = List(knots) {x -> RopeSection()}
+class Rope(val knots: Int) {
+    val ropeSections = List(knots - 1) { RopeSection() }
 
-    moveHead()
+    fun moveHead(direction: String): Pair<Int, Int> {
+        val head = ropeSections.first()
+        when (direction) {
+            "R" -> {
+                head.moveHead((head.headPos.first + 1) to head.headPos.second)
+            }
 
+            "L" -> {
+                head.moveHead((head.headPos.first - 1) to head.headPos.second)
+            }
+
+            "U" -> {
+                head.moveHead(head.headPos.first to (head.headPos.second + 1))
+            }
+
+            "D" -> {
+                head.moveHead(head.headPos.first to (head.headPos.second - 1))
+            }
+
+            else -> {}
+        }
+        for (i in 1 until knots - 1) {
+            ropeSections[i].moveHead(ropeSections[i-1].tailPos)
+        }
+
+        return head.headPos
+    }
+
+    fun tailVisited(): Int = ropeSections.last().positionsVisited.size
 }
 
 
