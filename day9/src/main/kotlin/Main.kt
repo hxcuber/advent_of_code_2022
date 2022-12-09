@@ -1,8 +1,9 @@
 import java.io.File
 import kotlin.math.absoluteValue
+import kotlin.math.sign
 
 fun main(args: Array<String>) {
-    val test = File("input2.txt").bufferedReader()
+    val test = File("input.txt").bufferedReader()
     val part1Rope = Rope(2)
     val part2Rope = Rope(10)
     test.forEachLine {
@@ -28,6 +29,13 @@ class RopeSection(
         return (headPos.first - tailPos.first).absoluteValue < 2
                 && (headPos.second - tailPos.second).absoluteValue < 2
     }
+    fun sameRow() = headPos.first == tailPos.first
+    fun sameColumn() = headPos.second == tailPos.second
+    fun headRightToTail() : Boolean = headPos.first > tailPos.first
+    fun headLeftToTail() : Boolean = headPos.first < tailPos.first
+    fun headUpToTail() : Boolean = headPos.second > tailPos.second
+    fun headDownToTail() : Boolean = headPos.second < tailPos.second
+
 
 //    fun tailEqHead() : Boolean {
 //        return (headPos.first == tailPos.first)
@@ -39,7 +47,26 @@ class RopeSection(
         val prevHead = headPos
         headPos = afterPos
         if (!tailAdjHead()) {
-            tailPos = prevHead
+            if (sameColumn()) {
+                val difference = (headPos.first - tailPos.first)
+                tailPos = (tailPos.first + difference - (difference.sign) to tailPos.second)
+
+            }
+
+            else if (sameRow()){
+                val difference = (headPos.second - tailPos.second)
+                tailPos = (tailPos.first to tailPos.second + difference - (difference.sign))
+            }
+
+            else {
+                val difference = headPos.first - tailPos.first to
+                        headPos.second - tailPos.second
+
+                tailPos = tailPos.first + 1 * (difference.first.sign) to
+                        tailPos.second + 1 * (difference.second.sign)
+            }
+
+
         }
         positionsVisited.add(tailPos)
         return headPos
