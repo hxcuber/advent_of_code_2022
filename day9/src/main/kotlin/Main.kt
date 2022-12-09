@@ -31,11 +31,6 @@ class RopeSection(
     }
     fun sameRow() = headPos.first == tailPos.first
     fun sameColumn() = headPos.second == tailPos.second
-    fun headRightToTail() : Boolean = headPos.first > tailPos.first
-    fun headLeftToTail() : Boolean = headPos.first < tailPos.first
-    fun headUpToTail() : Boolean = headPos.second > tailPos.second
-    fun headDownToTail() : Boolean = headPos.second < tailPos.second
-
 
 //    fun tailEqHead() : Boolean {
 //        return (headPos.first == tailPos.first)
