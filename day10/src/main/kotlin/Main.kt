@@ -61,7 +61,7 @@ class Program(var cycle: Int = 0, var register: Int = 1) {
             if (((i + 1) % 40 - 1 - current.second) in -1.. 1) {
                 ret.append("#")
             } else {
-                ret.append(".JELK")
+                ret.append(".")
             }
 
             if ((i + 1) % 40 == 0) ret.append("\n")
