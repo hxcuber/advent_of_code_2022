@@ -58,7 +58,7 @@ class Program(var cycle: Int = 0, var register: Int = 1) {
         val ret = StringBuilder()
         for (i in 0 until 240) {
             val current = duringCycle[i]
-            if (((i + 1) % 40 - 1 - current.second) in -1.. 1) {
+            if (((i + 1) % 40 - 1 - current.second) in -1..1) {
                 ret.append("#")
             } else {
                 ret.append(".")
